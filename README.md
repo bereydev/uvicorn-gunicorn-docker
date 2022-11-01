@@ -2,33 +2,17 @@
 
 ## Supported tags and respective `Dockerfile` links
 
-* [`python3.9`, `latest` _(Dockerfile)_](https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.9.dockerfile)
-* [`python3.8`, _(Dockerfile)_](https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.8.dockerfile)
-* [`python3.7`, _(Dockerfile)_](https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.7.dockerfile)
-* [`python3.6` _(Dockerfile)_](https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.6.dockerfile)
-* [`python3.9-slim` _(Dockerfile)_](https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.9-slim.dockerfile)
-* [`python3.8-slim` _(Dockerfile)_](https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.8-slim.dockerfile)
-
-## Discouraged tags
-
-* [`python3.9-alpine3.14` _(Dockerfile)_](https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.9-alpine3.14.dockerfile)
-* [`python3.8-alpine3.10` _(Dockerfile)_](https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.8-alpine3.10.dockerfile)
-* [`python3.7-alpine3.8` _(Dockerfile)_](https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.7-alpine3.8.dockerfile)
-* [`python3.6-alpine3.8` _(Dockerfile)_](https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.6-alpine3.8.dockerfile)
-
-To learn more about why Alpine images are discouraged for Python read the note at the end: [🚨 Alpine Python Warning](#-alpine-python-warning).
+* [`python3.11`, `latest` _(Dockerfile)_](https://github.com/bereydev/uvicorn-gunicorn-docker/blob/master/docker-images/python3.11.dockerfile)
 
 ---
 
-**Note**: There are [tags for each build date](https://hub.docker.com/r/tiangolo/uvicorn-gunicorn/tags). If you need to "pin" the Docker image version you use, you can select one of those tags. E.g. `tiangolo/uvicorn-gunicorn:python3.7-2019-10-15`.
-
 # uvicorn-gunicorn
 
-[**Docker**](https://www.docker.com/) image with [**Uvicorn**](https://www.uvicorn.org/) managed by [**Gunicorn**](https://gunicorn.org/) for high-performance web applications in **[Python](https://www.python.org/) 3.6 and above** with performance auto-tuning. Optionally in a slim version or based on Alpine Linux.
+[**Docker**](https://www.docker.com/) image with [**Uvicorn**](https://www.uvicorn.org/) managed by [**Gunicorn**](https://gunicorn.org/) for high-performance web applications in **[Python](https://www.python.org/) 3.11 and above** with performance auto-tuning.
 
-**GitHub repo**: [https://github.com/tiangolo/uvicorn-gunicorn-docker](https://github.com/tiangolo/uvicorn-gunicorn-docker)
+**GitHub repo**: [https://github.com/bereydev/uvicorn-gunicorn-docker](https://github.com/bereydev/uvicorn-gunicorn-docker)
 
-**Docker Hub image**: [https://hub.docker.com/r/tiangolo/uvicorn-gunicorn/](https://hub.docker.com/r/tiangolo/uvicorn-gunicorn/)
+**Docker Hub image**: [https://hub.docker.com/repository/docker/bereydev/uvicorn-gunicorn](https://hub.docker.com/repository/docker/bereydev/uvicorn-gunicorn)
 
 ## Description
 
@@ -51,7 +35,7 @@ In those cases (e.g. using Kubernetes) you would probably want to build a **Dock
 For example, your `Dockerfile` could look like:
 
 ```Dockerfile
-FROM python:3.9
+FROM python:3.11.0
 
 WORKDIR /code
 
@@ -114,18 +98,13 @@ This image will set a sensible configuration based on the server it is running o
 
 It has sensible defaults, but you can configure it with environment variables or override the configuration files.
 
-There is also a slim version and another one based on Alpine Linux. If you want one of those, use one of the tags from above.
-
 ### Frameworks
 
 This image was created to be the base image for:
 
-* [**tiangolo/uvicorn-gunicorn-starlette**](https://github.com/tiangolo/uvicorn-gunicorn-starlette-docker)
-* [**tiangolo/uvicorn-gunicorn-fastapi**](https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker)
+* [**bereydev/uvicorn-gunicorn-fastapi**](https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker)
 
 But could be used as the base image to run any Python web application that uses the ASGI specification.
-
-If you are creating a new [**Starlette**](https://www.starlette.io/) web application you should use [**tiangolo/uvicorn-gunicorn-starlette**](https://github.com/tiangolo/uvicorn-gunicorn-starlette-docker) instead.
 
 If you are creating a new [**FastAPI**](https://fastapi.tiangolo.com/) web application you should use [**tiangolo/uvicorn-gunicorn-fastapi**](https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker) instead.
 
@@ -142,7 +121,7 @@ You can use this image as a base image for other images.
 Assuming you have a file `requirements.txt`, you could have a `Dockerfile` like this:
 
 ```Dockerfile
-FROM tiangolo/uvicorn-gunicorn:python3.9
+FROM bereydev/uvicorn-gunicorn:python3.11
 
 COPY ./requirements.txt /app/requirements.txt
 
@@ -190,7 +169,7 @@ Let's say you have a project managed with [Poetry](https://python-poetry.org/), 
 Then you could have a `Dockerfile` using Docker multi-stage building with:
 
 ```Dockerfile
-FROM python:3.9 as requirements-stage
+FROM python:3.11.0 as requirements-stage
 
 WORKDIR /tmp
 
@@ -200,7 +179,7 @@ COPY ./pyproject.toml ./poetry.lock* /tmp/
 
 RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
 
-FROM tiangolo/uvicorn-gunicorn:python3.9
+FROM bereydev/uvicorn-gunicorn:python3.9
 
 COPY --from=requirements-stage /tmp/requirements.txt /app/requirements.txt
 
@@ -586,7 +565,7 @@ If you need to run a Python script before starting the app, you could make the `
 #! /usr/bin/env bash
 
 # Run custom Python script before starting
-python /app/my_custom_prestart_script.py
+python3 /app/my_custom_prestart_script.py
 ```
 
 You can customize the location of the prestart script with the environment variable `PRE_START_PATH` described above.
@@ -642,24 +621,6 @@ But these environment variables will work the same as described above:
 * `PORT`
 * `LOG_LEVEL`
 
-## 🚨 Alpine Python Warning
-
-In short: You probably shouldn't use Alpine for Python projects, instead use the `slim` Docker image versions.
-
----
-
-Do you want more details? Continue reading 👇
-
-Alpine is more useful for other languages where you build a static binary in one Docker image stage (using multi-stage Docker building) and then copy it to a simple Alpine image, and then just execute that binary. For example, using Go.
-
-But for Python, as Alpine doesn't use the standard tooling used for building Python extensions, when installing packages, in many cases Python (`pip`) won't find a precompiled installable package (a "wheel") for Alpine. And after debugging lots of strange errors you will realize that you have to install a lot of extra tooling and build a lot of dependencies just to use some of these common Python packages. 😩
-
-This means that, although the original Alpine image might have been small, you end up with a an image with a size comparable to the size you would have gotten if you had just used a standard Python image (based on Debian), or in some cases even larger. 🤯
-
-And in all those cases, it will take much longer to build, consuming much more resources, building dependencies for longer, and also increasing its carbon footprint, as you are using more CPU time and energy for each build. 🌳
-
-If you want slim Python images, you should instead try and use the `slim` versions that are still based on Debian, but are smaller. 🤓
-
 ## Tests
 
 All the image tags, configurations, environment variables and application options are tested.
@@ -678,56 +639,6 @@ All the image tags, configurations, environment variables and application option
 * ✏️ Fix typo (type annotation) in tests. PR [#55](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/55) by [@tiangolo](https://github.com/tiangolo).
 * 👷 Add GitHub Action latest-changes, update issue-manager, add funding. PR [#53](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/53) by [@tiangolo](https://github.com/tiangolo).
 * ⬆️ Install uvicorn[standard] to include uvloop and Gunicorn support. PR [#54](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/54) by [@tiangolo](https://github.com/tiangolo).
-### 0.6.0
-
-* Add docs about installing and pinning dependencies. PR [#41](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/41).
-* Add `slim` version. PR [#40](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/40).
-* Remove leftover unneeded config for tests. PR [#39](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/39).
-* Add extra configs, tests, and docs for:
-    * `WORKER_CLASS`
-    * `TIMEOUT`
-    * `KEEP_ALIVE`
-    * `GRACEFUL_TIMEOUT`
-    * `ACCESS_LOG`
-    * `ERROR_LOG`
-    * `GUNICORN_CMD_ARGS`
-    * `MAX_WORKERS`
-    * PR [#38](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/38)
-* Set up CI using GitHub actions, they provide more free instances, so builds finish faster (4 min vs 9 min). PR [#37](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/37).
-* Add support for Python 3.8. PR [#36](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/36).
-* Refactor tests to remove custom testing Dockerfiles, generate them during tests. PR [#35](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/35).
-* Refactor and simplify build process to reduce code duplication. PR [#34](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/34).
-* Disable `pip` cache during installation with `--no-cache-dir`. PR [#13](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/13) by [@pmav99](https://github.com/pmav99).
-* Migrate local development from Pipenv to Poetry. PR [#31](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/31).
-* Add tests and docs for custom `PRE_START_PATH` env var. PR [#30](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/30).
-* Add support for custom `PRE_START_PATH` env var. PR [#12](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/12) by [@mgfinch](https://github.com/mgfinch).
-
-### 0.5.0
-
-* Refactor tests to use env vars and add image tags for each build date, like `tiangolo/uvicorn-gunicorn:python3.7-2019-10-15`. PR [#15](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/15).
-* Update Gunicorn worker heartbeat directory to `/dev/shm` to improve performance. PR [#9](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/9) by [@wshayes](https://github.com/wshayes).
-* Upgrade Travis. PR [#7](https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/7).
-
-### 0.4.0
-
-* Add support for live auto-reload with an additional custom script `/start-reload.sh`, check the [updated documentation](https://github.com/tiangolo/uvicorn-gunicorn-docker#development-live-reload). PR <a href="https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/6" target="_blank">#6</a>.
-
-### 0.3.0
-
-* Set `WORKERS_PER_CORE` by default to `1`, as it shows to have the best performance on benchmarks.
-* Make the default web concurrency, when `WEB_CONCURRENCY` is not set, to a minimum of 2 workers. This is to avoid bad performance and blocking applications (server application) on small machines (server machine/cloud/etc). This can be overridden using `WEB_CONCURRENCY`. This applies for example in the case where `WORKERS_PER_CORE` is set to `1` (the default) and the server has only 1 CPU core. PR <a href="https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/5" target="_blank">#5</a>.
-
-### 0.2.0
-
-* Make `/start.sh` run independently, reading and generating used default environment variables. And remove `/entrypoint.sh` as it doesn't modify anything in the system, only reads environment variables. PR <a href="https://github.com/tiangolo/uvicorn-gunicorn-docker/pull/4" target="_blank">#4</a>.
-
-### 0.1.2
-
-* Whenever this image is built (and each of its tags/versions), trigger a build for the children images (<a href="https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker" target="_blank">FastAPI</a> and <a href="https://github.com/tiangolo/uvicorn-gunicorn-starlette-docker" target="_blank">Starlette</a>).
-
-### 0.1.0
-
-* Add support for `/app/prestart.sh`.
 
 ## License
 
